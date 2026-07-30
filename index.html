@@ -2,76 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta
         name="description"
-        content="Explore GitHub profiles, repositories, languages, achievements and developer activity."
+        content="A simple GitHub profile explorer built with HTML, CSS and JavaScript."
     >
 
-    <title>GitHub User Explorer+</title>
+    <title>GitHub User Explorer</title>
 
     <style>
         :root {
-            --background: #0d1117;
-            --surface: #161b22;
-            --surface-light: #21262d;
-            --border: #30363d;
-            --text: #f0f6fc;
-            --muted: #8b949e;
-            --primary: #2f81f7;
-            --primary-hover: #1f6feb;
-            --success: #3fb950;
-            --warning: #d29922;
-            --danger: #f85149;
-            --shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
-        }
-
-        body.light {
-            --background: #f6f8fa;
-            --surface: #ffffff;
-            --surface-light: #f3f4f6;
+            --bg: #f6f8fa;
+            --card: #ffffff;
+            --soft: #f3f4f6;
             --border: #d0d7de;
             --text: #1f2328;
             --muted: #656d76;
-            --primary: #0969da;
-            --primary-hover: #0550ae;
-            --shadow: 0 16px 40px rgba(31, 35, 40, 0.12);
+            --blue: #0969da;
+            --green: #1f883d;
+            --danger: #cf222e;
+            --shadow: 0 8px 24px rgba(140, 149, 159, 0.15);
+        }
+
+        body.dark {
+            --bg: #0d1117;
+            --card: #161b22;
+            --soft: #21262d;
+            --border: #30363d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --blue: #58a6ff;
+            --green: #3fb950;
+            --danger: #f85149;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
         }
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
         }
 
         body {
+            margin: 0;
             min-height: 100vh;
-            background:
-                radial-gradient(
-                    circle at top left,
-                    rgba(47, 129, 247, 0.12),
-                    transparent 35%
-                ),
-                var(--background);
+            background: var(--bg);
             color: var(--text);
             font-family:
-                Inter,
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
+                Arial,
                 sans-serif;
-            transition:
-                background 0.3s ease,
-                color 0.3s ease;
+            transition: background 0.2s, color 0.2s;
         }
 
         button,
@@ -79,325 +61,214 @@
             font: inherit;
         }
 
-        button {
-            border: none;
-        }
-
         a {
-            color: inherit;
+            color: var(--blue);
         }
 
         .container {
-            width: min(1180px, calc(100% - 32px));
-            margin: 0 auto;
+            width: min(1050px, calc(100% - 32px));
+            margin: auto;
         }
 
-        /* Navigation */
-
-        .navbar {
-            padding: 24px 0;
+        header {
+            border-bottom: 1px solid var(--border);
+            background: var(--card);
         }
 
-        .nav-content {
+        nav {
+            min-height: 68px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 20px;
         }
 
-        .brand {
+        .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .brand-logo {
-            width: 44px;
-            height: 44px;
-            display: grid;
-            place-items: center;
-            border-radius: 14px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            font-size: 24px;
-        }
-
-        .theme-button {
-            width: 45px;
-            height: 45px;
-            display: grid;
-            place-items: center;
-            border-radius: 14px;
-            background: var(--surface);
-            color: var(--text);
-            border: 1px solid var(--border);
-            cursor: pointer;
+            gap: 10px;
             font-size: 19px;
-            transition: transform 0.2s ease;
-        }
-
-        .theme-button:hover {
-            transform: translateY(-2px) rotate(8deg);
-        }
-
-        /* Hero */
-
-        .hero {
-            padding: 55px 0 32px;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 13px;
-            margin-bottom: 20px;
-            border-radius: 999px;
-            background: rgba(47, 129, 247, 0.12);
-            border: 1px solid rgba(47, 129, 247, 0.35);
-            color: #58a6ff;
-            font-size: 14px;
             font-weight: 700;
         }
 
-        .hero h1 {
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: clamp(38px, 7vw, 70px);
-            line-height: 1.05;
-            letter-spacing: -2.5px;
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: var(--text);
+            color: var(--card);
         }
 
-        .gradient-text {
-            background: linear-gradient(
-                90deg,
-                #58a6ff,
-                #bc8cff,
-                #3fb950
-            );
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        .theme-button {
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .hero {
+            padding: 65px 0 45px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(32px, 6vw, 52px);
+            letter-spacing: -1.5px;
         }
 
         .hero p {
-            max-width: 680px;
-            margin: 22px auto 0;
+            max-width: 650px;
+            margin: 15px auto 28px;
             color: var(--muted);
-            font-size: 18px;
-            line-height: 1.7;
+            font-size: 17px;
+            line-height: 1.6;
         }
 
-        /* Search */
-
-        .search-card {
-            max-width: 820px;
-            margin: 38px auto 0;
-            padding: 14px;
-            border-radius: 22px;
-            background: var(--surface);
+        .search-box {
+            max-width: 720px;
+            margin: auto;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 9px;
+            background: var(--card);
             border: 1px solid var(--border);
+            border-radius: 10px;
             box-shadow: var(--shadow);
         }
 
-        .search-form {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            gap: 10px;
-        }
-
-        .search-input {
+        .search-box input {
             width: 100%;
-            padding: 16px 18px;
-            border-radius: 14px;
+            padding: 13px 14px;
             border: 1px solid var(--border);
-            background: var(--background);
+            border-radius: 7px;
+            background: var(--bg);
             color: var(--text);
             outline: none;
         }
 
-        .search-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.15);
+        .search-box input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.12);
         }
 
-        .primary-button,
-        .secondary-button {
-            padding: 14px 20px;
-            border-radius: 14px;
-            cursor: pointer;
-            font-weight: 750;
-            transition:
-                transform 0.2s ease,
-                background 0.2s ease;
-        }
-
-        .primary-button {
-            color: white;
-            background: var(--primary);
-        }
-
-        .primary-button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .secondary-button {
-            background: var(--surface-light);
-            color: var(--text);
+        .button {
+            padding: 12px 17px;
             border: 1px solid var(--border);
+            border-radius: 7px;
+            background: var(--card);
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        .secondary-button:hover {
-            transform: translateY(-2px);
+        .button-primary {
+            border-color: var(--green);
+            background: var(--green);
+            color: white;
+        }
+
+        .button:hover {
+            filter: brightness(0.96);
         }
 
         .recent-searches {
+            max-width: 720px;
+            min-height: 32px;
+            margin: 15px auto 0;
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-top: 18px;
-            min-height: 32px;
+            gap: 7px;
         }
 
-        .recent-label {
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .recent-item {
-            padding: 7px 11px;
-            border-radius: 999px;
-            background: var(--surface-light);
-            color: var(--muted);
+        .recent-button {
+            padding: 6px 10px;
             border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--card);
+            color: var(--muted);
             cursor: pointer;
             font-size: 13px;
         }
 
-        .recent-item:hover {
-            color: var(--text);
-            border-color: var(--primary);
-        }
-
-        /* Status */
-
         .status {
             display: none;
-            max-width: 820px;
-            margin: 28px auto;
-            padding: 18px;
-            border-radius: 16px;
-            text-align: center;
-            background: var(--surface);
+            margin: 20px 0;
+            padding: 15px;
             border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
             color: var(--muted);
+            text-align: center;
         }
 
-        .status.show {
+        .status.visible {
             display: block;
         }
 
         .status.error {
             color: var(--danger);
-            border-color: rgba(248, 81, 73, 0.45);
+            border-color: var(--danger);
         }
-
-        .spinner {
-            width: 28px;
-            height: 28px;
-            margin: 0 auto 12px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Results */
 
         .results {
             display: none;
-            padding: 30px 0 80px;
+            padding-bottom: 60px;
         }
 
-        .results.show {
+        .results.visible {
             display: block;
-            animation: fadeUp 0.45s ease;
         }
 
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .panel {
-            padding: 24px;
-            border-radius: 22px;
-            background: var(--surface);
+        .card {
+            padding: 22px;
+            background: var(--card);
             border: 1px solid var(--border);
+            border-radius: 10px;
             box-shadow: var(--shadow);
         }
 
-        /* Profile */
-
-        .profile-panel {
+        .profile-card {
             display: grid;
             grid-template-columns: auto 1fr auto;
-            gap: 24px;
             align-items: center;
+            gap: 22px;
         }
 
         .avatar {
-            width: 130px;
-            height: 130px;
+            width: 115px;
+            height: 115px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--surface-light);
-            box-shadow: 0 0 0 1px var(--border);
+            border: 1px solid var(--border);
         }
 
-        .profile-info h2 {
-            font-size: 32px;
-            margin-bottom: 5px;
+        .profile-card h2 {
+            margin: 0 0 4px;
+            font-size: 29px;
         }
 
         .username {
-            color: #58a6ff;
-            font-size: 17px;
-            font-weight: 650;
+            color: var(--blue);
+            font-weight: 600;
         }
 
         .bio {
-            max-width: 650px;
-            margin-top: 14px;
+            margin: 12px 0;
             color: var(--muted);
-            line-height: 1.65;
+            line-height: 1.55;
         }
 
         .profile-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px 18px;
-            margin-top: 16px;
+            gap: 12px;
             color: var(--muted);
             font-size: 14px;
         }
@@ -405,262 +276,97 @@
         .profile-actions {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .profile-link {
-            padding: 12px 16px;
-            text-align: center;
+        .profile-actions a {
             text-decoration: none;
-            border-radius: 12px;
-            background: var(--primary);
-            color: white;
-            font-weight: 700;
-        }
-
-        /* Stats */
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 14px;
-            margin-top: 18px;
-        }
-
-        .stat-card {
-            padding: 20px 14px;
             text-align: center;
-            border-radius: 18px;
-            background: var(--surface);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .stat {
+            padding: 18px;
+            text-align: center;
+            background: var(--card);
             border: 1px solid var(--border);
+            border-radius: 9px;
         }
 
-        .stat-icon {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 22px;
-        }
-
-        .stat-value {
+        .stat strong {
             display: block;
             font-size: 25px;
-            font-weight: 850;
         }
 
-        .stat-label {
-            display: block;
-            margin-top: 4px;
+        .stat span {
             color: var(--muted);
             font-size: 13px;
         }
 
-        /* Dashboard */
-
-        .dashboard-grid {
+        .content-grid {
             display: grid;
-            grid-template-columns: 0.85fr 1.2fr 1fr;
-            gap: 18px;
-            margin-top: 18px;
-        }
-
-        .section-title {
-            margin-bottom: 18px;
-            font-size: 20px;
-        }
-
-        .score-wrapper {
-            display: grid;
-            place-items: center;
+            grid-template-columns: 1fr 1.8fr;
             gap: 16px;
         }
 
-        .score-ring {
-            --angle: 0deg;
+        .section-title {
+            margin: 0 0 17px;
+            font-size: 19px;
+        }
 
-            width: 145px;
-            height: 145px;
+        .language-list {
             display: grid;
-            place-items: center;
-            position: relative;
-            border-radius: 50%;
-            background:
-                conic-gradient(
-                    var(--primary) var(--angle),
-                    var(--surface-light) 0
-                );
-        }
-
-        .score-ring::before {
-            content: "";
-            position: absolute;
-            width: 112px;
-            height: 112px;
-            border-radius: 50%;
-            background: var(--surface);
-        }
-
-        .score-content {
-            position: relative;
-            text-align: center;
-        }
-
-        .score-number {
-            display: block;
-            font-size: 35px;
-            font-weight: 900;
-        }
-
-        .score-label {
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        .vibe {
-            color: var(--muted);
-            line-height: 1.7;
-        }
-
-        .fun-message {
-            margin-top: 14px;
-            padding: 13px;
-            border-radius: 13px;
-            background: var(--surface-light);
-            border: 1px solid var(--border);
-            line-height: 1.5;
-        }
-
-        .details-list {
-            display: grid;
-            gap: 14px;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .detail-label {
-            color: var(--muted);
-        }
-
-        .detail-value {
-            max-width: 60%;
-            text-align: right;
-            word-break: break-word;
-            font-weight: 650;
-        }
-
-        /* Badges */
-
-        .badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .achievement {
-            padding: 10px 12px;
-            border-radius: 12px;
-            background: var(--surface-light);
-            border: 1px solid var(--border);
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        /* Languages */
-
-        .content-section {
-            margin-top: 18px;
-        }
-
-        .languages-list {
-            display: grid;
-            gap: 14px;
+            gap: 13px;
         }
 
         .language-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 7px;
+            margin-bottom: 6px;
             font-size: 14px;
         }
 
-        .language-name {
-            font-weight: 700;
-        }
-
-        .language-percentage {
-            color: var(--muted);
-        }
-
-        .language-track {
-            height: 10px;
+        .language-bar {
+            height: 7px;
             overflow: hidden;
-            border-radius: 999px;
-            background: var(--surface-light);
+            border-radius: 10px;
+            background: var(--soft);
         }
 
         .language-fill {
             height: 100%;
             border-radius: inherit;
-            background: linear-gradient(
-                90deg,
-                var(--primary),
-                #bc8cff
-            );
-            animation: growBar 0.7s ease;
+            background: var(--blue);
         }
 
-        @keyframes growBar {
-            from {
-                width: 0;
-            }
-        }
-
-        /* Repositories */
-
-        .repo-grid {
+        .repo-list {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
+            gap: 11px;
         }
 
-        .repo-card {
-            padding: 20px;
-            border-radius: 18px;
-            background: var(--surface-light);
+        .repo {
+            padding: 16px;
             border: 1px solid var(--border);
-            transition:
-                transform 0.2s ease,
-                border-color 0.2s ease;
+            border-radius: 8px;
+            background: var(--soft);
         }
 
-        .repo-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-        }
-
-        .repo-title {
-            display: inline-block;
-            margin-bottom: 9px;
-            color: #58a6ff;
+        .repo-name {
+            font-weight: 700;
             text-decoration: none;
-            font-size: 17px;
-            font-weight: 800;
         }
 
         .repo-description {
-            min-height: 45px;
+            margin: 8px 0 12px;
+            min-height: 22px;
             color: var(--muted);
-            line-height: 1.5;
+            line-height: 1.45;
             font-size: 14px;
         }
 
@@ -668,110 +374,58 @@
             display: flex;
             flex-wrap: wrap;
             gap: 13px;
-            margin-top: 16px;
             color: var(--muted);
             font-size: 13px;
         }
 
-        /* Activity */
+        .activity-card {
+            margin-top: 16px;
+        }
 
         .activity-list {
             display: grid;
-            gap: 12px;
+            gap: 9px;
         }
 
         .activity-item {
+            padding: 13px;
             display: flex;
-            align-items: flex-start;
-            gap: 13px;
-            padding: 14px;
-            border-radius: 14px;
-            background: var(--surface-light);
+            gap: 12px;
             border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--soft);
         }
 
         .activity-icon {
-            width: 38px;
-            height: 38px;
-            display: grid;
-            place-items: center;
-            flex-shrink: 0;
-            border-radius: 11px;
-            background: var(--surface);
+            font-size: 19px;
         }
 
         .activity-text {
-            line-height: 1.5;
+            line-height: 1.45;
         }
 
         .activity-time {
             display: block;
-            margin-top: 4px;
+            margin-top: 3px;
             color: var(--muted);
             font-size: 12px;
         }
 
-        .empty-message {
+        .empty {
             color: var(--muted);
             text-align: center;
-            padding: 18px;
-        }
-
-        /* Toast */
-
-        .toast {
-            position: fixed;
-            right: 22px;
-            bottom: 22px;
-            z-index: 20;
-            max-width: 340px;
-            padding: 14px 18px;
-            border-radius: 14px;
-            background: var(--surface);
-            color: var(--text);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
-            transition: 0.3s ease;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Confetti */
-
-        .confetti {
-            position: fixed;
-            top: -15px;
-            z-index: 100;
-            width: 9px;
-            height: 14px;
-            pointer-events: none;
-            animation: fall 2.3s linear forwards;
-        }
-
-        @keyframes fall {
-            to {
-                transform:
-                    translateY(110vh)
-                    rotate(720deg);
-                opacity: 0;
-            }
         }
 
         footer {
-            padding: 28px 0 45px;
-            text-align: center;
+            padding: 25px;
+            border-top: 1px solid var(--border);
             color: var(--muted);
+            text-align: center;
             font-size: 14px;
         }
 
-        @media (max-width: 950px) {
-            .profile-panel {
+        @media (max-width: 800px) {
+            .profile-card {
                 grid-template-columns: auto 1fr;
             }
 
@@ -784,39 +438,31 @@
                 flex: 1;
             }
 
-            .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .dashboard-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .dashboard-grid .panel:last-child {
-                grid-column: 1 / -1;
+            .content-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 650px) {
+        @media (max-width: 580px) {
             .hero {
-                padding-top: 25px;
+                padding-top: 42px;
             }
 
-            .hero h1 {
-                letter-spacing: -1.5px;
-            }
-
-            .search-form {
+            .search-box {
                 grid-template-columns: 1fr;
             }
 
-            .profile-panel {
+            .profile-card {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
 
             .avatar {
-                margin: 0 auto;
+                margin: auto;
             }
 
             .profile-meta {
@@ -827,88 +473,57 @@
                 grid-column: auto;
                 flex-direction: column;
             }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .dashboard-grid,
-            .repo-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .dashboard-grid .panel:last-child {
-                grid-column: auto;
-            }
-
-            .detail-row {
-                flex-direction: column;
-            }
-
-            .detail-value {
-                max-width: 100%;
-                text-align: left;
-            }
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="container nav-content">
-            <div class="brand">
-                <div class="brand-logo">🐙</div>
-                <span>GitHub Explorer+</span>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <div class="logo-icon">GH</div>
+                <span>GitHub User Explorer</span>
             </div>
 
             <button
                 id="themeButton"
                 class="theme-button"
                 type="button"
-                aria-label="Toggle color theme"
+                title="Change theme"
             >
-                ☀️
+                🌙
             </button>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <header class="hero">
-        <div class="container">
-            <div class="hero-badge">
-                ⚡ Powered by the GitHub REST API
-            </div>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Explore GitHub profiles</h1>
 
-            <h1>
-                Discover the developer behind the
-                <span class="gradient-text">GitHub profile.</span>
-            </h1>
+                <p>
+                    Search for a developer and view their repositories,
+                    languages, stars and recent public activity.
+                </p>
 
-            <p>
-                Explore repositories, languages, public activity,
-                achievements and a fun developer profile score.
-            </p>
-
-            <div class="search-card">
-                <form id="searchForm" class="search-form">
+                <form id="searchForm" class="search-box">
                     <input
                         id="usernameInput"
-                        class="search-input"
                         type="text"
-                        placeholder="Enter a GitHub username..."
+                        placeholder="Enter GitHub username"
                         autocomplete="off"
-                        aria-label="GitHub username"
                     >
 
-                    <button class="primary-button" type="submit">
-                        🔍 Explore
+                    <button class="button button-primary" type="submit">
+                        Search
                     </button>
 
                     <button
-                        id="surpriseButton"
-                        class="secondary-button"
+                        id="randomButton"
+                        class="button"
                         type="button"
                     >
-                        🎲 Surprise me
+                        Random
                     </button>
                 </form>
 
@@ -917,24 +532,22 @@
                     class="recent-searches"
                 ></div>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <main>
         <div class="container">
             <div id="status" class="status"></div>
 
             <section id="results" class="results">
-                <article class="panel profile-panel">
+                <article class="card profile-card">
                     <img
                         id="avatar"
                         class="avatar"
                         src=""
-                        alt="GitHub user avatar"
+                        alt="GitHub profile avatar"
                     >
 
-                    <div class="profile-info">
-                        <h2 id="displayName"></h2>
+                    <div>
+                        <h2 id="name"></h2>
                         <div id="username" class="username"></div>
                         <p id="bio" class="bio"></p>
                         <div id="profileMeta" class="profile-meta"></div>
@@ -942,294 +555,193 @@
 
                     <div class="profile-actions">
                         <a
-                            id="githubProfileLink"
-                            class="profile-link"
+                            id="profileLink"
+                            class="button button-primary"
                             href="#"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Open GitHub ↗
+                            Open GitHub
                         </a>
 
                         <button
                             id="shareButton"
-                            class="secondary-button"
+                            class="button"
                             type="button"
                         >
-                            🔗 Share report
+                            Copy link
                         </button>
                     </div>
                 </article>
 
-                <section id="statsGrid" class="stats-grid"></section>
+                <section id="stats" class="stats"></section>
 
-                <section class="dashboard-grid">
-                    <article class="panel">
-                        <h3 class="section-title">Profile Score</h3>
-
-                        <div class="score-wrapper">
-                            <div id="scoreRing" class="score-ring">
-                                <div class="score-content">
-                                    <span
-                                        id="scoreNumber"
-                                        class="score-number"
-                                    >
-                                        0
-                                    </span>
-
-                                    <span class="score-label">
-                                        out of 100
-                                    </span>
-                                </div>
-                            </div>
-
-                            <p id="scoreText" class="vibe"></p>
-                        </div>
+                <div class="content-grid">
+                    <article class="card">
+                        <h3 class="section-title">Languages</h3>
+                        <div id="languages" class="language-list"></div>
                     </article>
 
-                    <article class="panel">
-                        <h3 class="section-title">Developer Details</h3>
-                        <div id="detailsList" class="details-list"></div>
+                    <article class="card">
+                        <h3 class="section-title">Top repositories</h3>
+                        <div id="repositories" class="repo-list"></div>
                     </article>
+                </div>
 
-                    <article class="panel">
-                        <h3 class="section-title">Developer Vibe</h3>
-                        <p id="developerVibe" class="vibe"></p>
-                        <div id="funMessage" class="fun-message"></div>
-
-                        <h3
-                            class="section-title"
-                            style="margin-top: 22px;"
-                        >
-                            Achievements
-                        </h3>
-
-                        <div id="badges" class="badges"></div>
-                    </article>
-                </section>
-
-                <article class="panel content-section">
-                    <h3 class="section-title">
-                        Primary Repository Languages
-                    </h3>
-
-                    <div id="languagesList" class="languages-list"></div>
-                </article>
-
-                <article class="panel content-section">
-                    <h3 class="section-title">Top Repositories</h3>
-                    <div id="repoGrid" class="repo-grid"></div>
-                </article>
-
-                <article class="panel content-section">
-                    <h3 class="section-title">Recent Public Activity</h3>
-                    <div id="activityList" class="activity-list"></div>
+                <article class="card activity-card">
+                    <h3 class="section-title">Recent public activity</h3>
+                    <div id="activity" class="activity-list"></div>
                 </article>
             </section>
         </div>
     </main>
 
     <footer>
-        <div class="container">
-            Built with HTML, CSS, JavaScript and the GitHub REST API.
-        </div>
+        Built with HTML, CSS, JavaScript and the GitHub API.
     </footer>
 
-    <div id="toast" class="toast"></div>
-
     <script>
-        const API_BASE_URL = "https://api.github.com";
+        const API_URL = "https://api.github.com";
 
-        const surpriseUsers = [
+        const randomUsers = [
             "torvalds",
             "sindresorhus",
             "addyosmani",
             "gaearon",
-            "cassidoo",
-            "kentcdodds"
+            "kentcdodds",
+            "cassidoo"
         ];
 
-        const elements = {
-            form: document.getElementById("searchForm"),
-            usernameInput: document.getElementById("usernameInput"),
-            surpriseButton: document.getElementById("surpriseButton"),
-            themeButton: document.getElementById("themeButton"),
-            recentSearches: document.getElementById("recentSearches"),
-            status: document.getElementById("status"),
-            results: document.getElementById("results"),
-            avatar: document.getElementById("avatar"),
-            displayName: document.getElementById("displayName"),
-            username: document.getElementById("username"),
-            bio: document.getElementById("bio"),
-            profileMeta: document.getElementById("profileMeta"),
-            githubProfileLink: document.getElementById("githubProfileLink"),
-            shareButton: document.getElementById("shareButton"),
-            statsGrid: document.getElementById("statsGrid"),
-            scoreRing: document.getElementById("scoreRing"),
-            scoreNumber: document.getElementById("scoreNumber"),
-            scoreText: document.getElementById("scoreText"),
-            detailsList: document.getElementById("detailsList"),
-            developerVibe: document.getElementById("developerVibe"),
-            funMessage: document.getElementById("funMessage"),
-            badges: document.getElementById("badges"),
-            languagesList: document.getElementById("languagesList"),
-            repoGrid: document.getElementById("repoGrid"),
-            activityList: document.getElementById("activityList"),
-            toast: document.getElementById("toast")
-        };
+        const form = document.getElementById("searchForm");
+        const usernameInput = document.getElementById("usernameInput");
+        const randomButton = document.getElementById("randomButton");
+        const themeButton = document.getElementById("themeButton");
+        const shareButton = document.getElementById("shareButton");
+
+        const statusBox = document.getElementById("status");
+        const results = document.getElementById("results");
+        const recentSearches = document.getElementById("recentSearches");
 
         let currentUsername = "";
 
-        initializeTheme();
-        renderRecentSearches();
-        loadUsernameFromUrl();
+        setupTheme();
+        showRecentSearches();
+        loadUserFromUrl();
 
-        elements.form.addEventListener("submit", event => {
+        form.addEventListener("submit", function (event) {
             event.preventDefault();
-            searchUser(elements.usernameInput.value);
+            searchUser(usernameInput.value);
         });
 
-        elements.surpriseButton.addEventListener("click", () => {
-            const username =
-                surpriseUsers[
-                    Math.floor(Math.random() * surpriseUsers.length)
-                ];
-
-            elements.usernameInput.value = username;
-            searchUser(username);
-        });
-
-        elements.themeButton.addEventListener("click", toggleTheme);
-        elements.shareButton.addEventListener("click", shareCurrentReport);
-
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem("githubExplorerTheme");
-            const isLight = savedTheme === "light";
-
-            document.body.classList.toggle("light", isLight);
-            elements.themeButton.textContent = isLight ? "🌙" : "☀️";
-        }
-
-        function toggleTheme() {
-            const isLight =
-                document.body.classList.toggle("light");
-
-            localStorage.setItem(
-                "githubExplorerTheme",
-                isLight ? "light" : "dark"
+        randomButton.addEventListener("click", function () {
+            const randomIndex = Math.floor(
+                Math.random() * randomUsers.length
             );
 
-            elements.themeButton.textContent =
-                isLight ? "🌙" : "☀️";
-        }
+            usernameInput.value = randomUsers[randomIndex];
+            searchUser(usernameInput.value);
+        });
 
-        function loadUsernameFromUrl() {
-            const parameters = new URLSearchParams(window.location.search);
-            const username = parameters.get("user");
+        themeButton.addEventListener("click", function () {
+            const darkMode = document.body.classList.toggle("dark");
 
-            if (username) {
-                elements.usernameInput.value = username;
-                searchUser(username);
+            localStorage.setItem(
+                "explorer-theme",
+                darkMode ? "dark" : "light"
+            );
+
+            themeButton.textContent = darkMode ? "☀️" : "🌙";
+        });
+
+        shareButton.addEventListener("click", async function () {
+            const url = new URL(window.location.href);
+            url.searchParams.set("user", currentUsername);
+
+            try {
+                await navigator.clipboard.writeText(url.toString());
+                shareButton.textContent = "Copied";
+
+                setTimeout(function () {
+                    shareButton.textContent = "Copy link";
+                }, 1500);
+            } catch {
+                alert("Could not copy the link.");
             }
-        }
+        });
 
         async function searchUser(rawUsername) {
-            const username = normalizeUsername(rawUsername);
+            const username = rawUsername.trim().replace(/^@/, "");
 
             if (!isValidUsername(username)) {
-                showStatus(
-                    "Please enter a valid GitHub username.",
-                    "error"
-                );
+                showStatus("Please enter a valid GitHub username.", true);
                 return;
             }
 
             currentUsername = username;
-            elements.usernameInput.value = username;
+            usernameInput.value = username;
 
-            updateUrl(username);
             saveRecentSearch(username);
-            renderRecentSearches();
+            showRecentSearches();
+            updateUrl(username);
 
-            showLoading();
-            elements.results.classList.remove("show");
+            showStatus("Loading GitHub profile...");
+            results.classList.remove("visible");
 
             try {
-                const profile = await fetchGitHubData(
-                    `${API_BASE_URL}/users/${encodeURIComponent(username)}`
+                const profileResponse = await fetch(
+                    `${API_URL}/users/${encodeURIComponent(username)}`
                 );
 
-                const [repositories, events] = await Promise.all([
-                    fetchGitHubData(
-                        `${API_BASE_URL}/users/${encodeURIComponent(username)}/repos` +
-                        "?per_page=100&sort=updated&type=owner"
-                    ),
-                    fetchGitHubData(
-                        `${API_BASE_URL}/users/${encodeURIComponent(username)}/events/public` +
-                        "?per_page=10"
-                    )
-                ]);
+                if (profileResponse.status === 404) {
+                    throw new Error("GitHub user not found.");
+                }
+
+                if (profileResponse.status === 403) {
+                    throw new Error(
+                        "GitHub API limit reached. Please try again later."
+                    );
+                }
+
+                if (!profileResponse.ok) {
+                    throw new Error("Could not load this GitHub profile.");
+                }
+
+                const profile = await profileResponse.json();
+
+                const [reposResponse, eventsResponse] =
+                    await Promise.all([
+                        fetch(
+                            `${API_URL}/users/${encodeURIComponent(username)}` +
+                            `/repos?per_page=100&sort=updated&type=owner`
+                        ),
+
+                        fetch(
+                            `${API_URL}/users/${encodeURIComponent(username)}` +
+                            `/events/public?per_page=10`
+                        )
+                    ]);
+
+                const repositories = reposResponse.ok
+                    ? await reposResponse.json()
+                    : [];
+
+                const events = eventsResponse.ok
+                    ? await eventsResponse.json()
+                    : [];
 
                 renderProfile(profile, repositories, events);
 
                 hideStatus();
-                elements.results.classList.add("show");
-
-                window.setTimeout(() => {
-                    elements.results.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-                }, 100);
+                results.classList.add("visible");
             } catch (error) {
-                elements.results.classList.remove("show");
-                showStatus(error.message, "error");
+                showStatus(error.message, true);
             }
-        }
-
-        async function fetchGitHubData(url) {
-            const response = await fetch(url, {
-                headers: {
-                    Accept: "application/vnd.github+json"
-                }
-            });
-
-            if (response.status === 404) {
-                throw new Error(
-                    "GitHub user not found. Check the username and try again."
-                );
-            }
-
-            if (response.status === 403) {
-                const resetTimestamp =
-                    response.headers.get("x-ratelimit-reset");
-
-                let message =
-                    "GitHub API rate limit reached. Please try again later.";
-
-                if (resetTimestamp) {
-                    const resetTime = new Date(
-                        Number(resetTimestamp) * 1000
-                    ).toLocaleTimeString();
-
-                    message += ` Limit resets around ${resetTime}.`;
-                }
-
-                throw new Error(message);
-            }
-
-            if (!response.ok) {
-                throw new Error(
-                    "Unable to load GitHub data right now."
-                );
-            }
-
-            return response.json();
         }
 
         function renderProfile(profile, repositories, events) {
-            const originalRepositories =
-                repositories.filter(repository => !repository.fork);
+            const originalRepositories = repositories.filter(
+                repository => !repository.fork
+            );
 
             const totalStars = originalRepositories.reduce(
                 (total, repository) =>
@@ -1237,382 +749,104 @@
                 0
             );
 
-            const totalForks = originalRepositories.reduce(
-                (total, repository) =>
-                    total + repository.forks_count,
-                0
-            );
-
-            const accountAge = calculateAccountAge(profile.created_at);
-
-            const score = calculateProfileScore(
-                profile,
-                originalRepositories,
-                totalStars
-            );
-
-            elements.avatar.src = profile.avatar_url;
-            elements.avatar.alt =
-                `${profile.login}'s GitHub profile picture`;
-
-            elements.displayName.textContent =
+            document.getElementById("avatar").src = profile.avatar_url;
+            document.getElementById("name").textContent =
                 profile.name || profile.login;
 
-            elements.username.textContent = `@${profile.login}`;
+            document.getElementById("username").textContent =
+                `@${profile.login}`;
 
-            elements.bio.textContent =
-                profile.bio ||
-                "This developer has not added a bio yet.";
+            document.getElementById("bio").textContent =
+                profile.bio || "No bio has been added.";
 
-            elements.githubProfileLink.href = profile.html_url;
+            document.getElementById("profileLink").href =
+                profile.html_url;
 
             renderProfileMeta(profile);
-            renderStats(
-                profile,
-                originalRepositories,
-                totalStars,
-                totalForks,
-                accountAge
-            );
-
-            renderScore(score);
-            renderDetails(profile, accountAge);
-            renderDeveloperVibe(
-                profile,
-                originalRepositories,
-                totalStars
-            );
-
-            renderBadges(
-                profile,
-                originalRepositories,
-                totalStars,
-                score,
-                accountAge
-            );
-
+            renderStats(profile, originalRepositories, totalStars);
             renderLanguages(originalRepositories);
             renderRepositories(originalRepositories);
             renderActivity(events);
-
-            if (score >= 80) {
-                launchConfetti();
-            }
         }
 
         function renderProfileMeta(profile) {
-            const items = [];
+            const details = [];
 
             if (profile.location) {
-                items.push(`📍 ${escapeHtml(profile.location)}`);
+                details.push(`📍 ${escapeHtml(profile.location)}`);
             }
 
             if (profile.company) {
-                items.push(`🏢 ${escapeHtml(profile.company)}`);
+                details.push(`🏢 ${escapeHtml(profile.company)}`);
             }
 
-            if (profile.blog) {
-                const websiteUrl = normalizeWebsite(profile.blog);
+            details.push(`Joined ${formatDate(profile.created_at)}`);
 
-                items.push(
-                    `<a href="${websiteUrl}" target="_blank" ` +
-                    `rel="noopener noreferrer">🔗 Website</a>`
-                );
-            }
-
-            items.push(
-                `📅 Joined ${formatDate(profile.created_at)}`
-            );
-
-            elements.profileMeta.innerHTML = items
-                .map(item => `<span>${item}</span>`)
-                .join("");
+            document.getElementById("profileMeta").innerHTML =
+                details
+                    .map(detail => `<span>${detail}</span>`)
+                    .join("");
         }
 
-        function renderStats(
-            profile,
-            repositories,
-            totalStars,
-            totalForks,
-            accountAge
-        ) {
+        function renderStats(profile, repositories, totalStars) {
             const stats = [
                 {
-                    icon: "📦",
-                    value: formatNumber(repositories.length),
-                    label: "Original Repos"
+                    value: repositories.length,
+                    label: "Repositories"
                 },
                 {
-                    icon: "👥",
-                    value: formatNumber(profile.followers),
+                    value: profile.followers,
                     label: "Followers"
                 },
                 {
-                    icon: "🤝",
-                    value: formatNumber(profile.following),
+                    value: profile.following,
                     label: "Following"
                 },
                 {
-                    icon: "⭐",
-                    value: formatNumber(totalStars),
-                    label: "Total Stars"
-                },
-                {
-                    icon: "🍴",
-                    value: formatNumber(totalForks),
-                    label: "Total Forks"
-                },
-                {
-                    icon: "⏳",
-                    value: `${accountAge.years}y`,
-                    label: "Account Age"
+                    value: totalStars,
+                    label: "Total stars"
                 }
             ];
 
-            elements.statsGrid.innerHTML = stats
-                .map(stat => `
-                    <article class="stat-card">
-                        <span class="stat-icon">${stat.icon}</span>
-                        <span class="stat-value">${stat.value}</span>
-                        <span class="stat-label">${stat.label}</span>
-                    </article>
-                `)
-                .join("");
-        }
-
-        function calculateProfileScore(
-            profile,
-            repositories,
-            totalStars
-        ) {
-            let score = 0;
-
-            if (profile.name) score += 6;
-            if (profile.bio) score += 12;
-            if (profile.location) score += 6;
-            if (profile.blog) score += 6;
-            if (profile.company) score += 5;
-            if (profile.twitter_username) score += 5;
-
-            score += Math.min(repositories.length * 1.2, 18);
-            score += Math.min(profile.followers / 4, 14);
-            score += Math.min(totalStars / 2, 14);
-
-            const hasProfileReadme = repositories.some(
-                repository =>
-                    repository.name.toLowerCase() ===
-                    profile.login.toLowerCase()
-            );
-
-            if (hasProfileReadme) score += 8;
-
-            const activeRepository = repositories.some(repository => {
-                const updatedDate = new Date(repository.updated_at);
-                const daysSinceUpdate =
-                    (Date.now() - updatedDate.getTime()) /
-                    (1000 * 60 * 60 * 24);
-
-                return daysSinceUpdate <= 90;
-            });
-
-            if (activeRepository) score += 6;
-
-            return Math.min(100, Math.round(score));
-        }
-
-        function renderScore(score) {
-            elements.scoreNumber.textContent = score;
-
-            elements.scoreRing.style.setProperty(
-                "--angle",
-                `${score * 3.6}deg`
-            );
-
-            if (score >= 85) {
-                elements.scoreText.textContent =
-                    "Excellent profile. Strong public developer presence.";
-            } else if (score >= 70) {
-                elements.scoreText.textContent =
-                    "A solid GitHub profile with room for a few upgrades.";
-            } else if (score >= 50) {
-                elements.scoreText.textContent =
-                    "A promising profile. Better documentation could make it shine.";
-            } else {
-                elements.scoreText.textContent =
-                    "The coding journey has started. More projects and profile details will help.";
-            }
-        }
-
-        function renderDetails(profile, accountAge) {
-            const details = [
-                {
-                    label: "GitHub username",
-                    value: `@${profile.login}`
-                },
-                {
-                    label: "Account type",
-                    value: profile.type
-                },
-                {
-                    label: "Public gists",
-                    value: formatNumber(profile.public_gists)
-                },
-                {
-                    label: "Hireable",
-                    value:
-                        profile.hireable === true
-                            ? "Yes"
-                            : "Not specified"
-                },
-                {
-                    label: "Account age",
-                    value:
-                        `${accountAge.years} years, ` +
-                        `${accountAge.months} months`
-                },
-                {
-                    label: "Last profile update",
-                    value: formatDate(profile.updated_at)
-                }
-            ];
-
-            elements.detailsList.innerHTML = details
-                .map(detail => `
-                    <div class="detail-row">
-                        <span class="detail-label">
-                            ${escapeHtml(detail.label)}
-                        </span>
-
-                        <span class="detail-value">
-                            ${escapeHtml(String(detail.value))}
-                        </span>
-                    </div>
-                `)
-                .join("");
-        }
-
-        function renderDeveloperVibe(
-            profile,
-            repositories,
-            totalStars
-        ) {
-            let vibe;
-            let message;
-
-            if (totalStars >= 1000) {
-                vibe = "Open-source celebrity energy.";
-                message =
-                    "GitHub stars are practically orbiting this profile. 🌟";
-            } else if (profile.followers >= 500) {
-                vibe = "Strong community-builder energy.";
-                message =
-                    "People are clearly interested in what this developer builds. 🧲";
-            } else if (repositories.length >= 25) {
-                vibe = "Productive builder who enjoys shipping projects.";
-                message =
-                    "This profile has serious 'one more repository' energy. 🚀";
-            } else if (repositories.length >= 10) {
-                vibe = "Curious developer with a growing project collection.";
-                message =
-                    "A healthy mix of learning, experimenting and building. 🧪";
-            } else {
-                vibe = "Early-stage builder preparing for bigger projects.";
-                message =
-                    "Every strong GitHub profile started with repository number one. 🌱";
-            }
-
-            elements.developerVibe.textContent = vibe;
-            elements.funMessage.textContent = message;
-        }
-
-        function renderBadges(
-            profile,
-            repositories,
-            totalStars,
-            score,
-            accountAge
-        ) {
-            const badges = [];
-
-            if (repositories.length >= 10) {
-                badges.push("🚀 Project Builder");
-            }
-
-            if (repositories.length >= 25) {
-                badges.push("🏭 Repository Factory");
-            }
-
-            if (totalStars >= 10) {
-                badges.push("⭐ Star Collector");
-            }
-
-            if (profile.followers >= 50) {
-                badges.push("🧲 Community Magnet");
-            }
-
-            if (score >= 75) {
-                badges.push("💎 Profile Pro");
-            }
-
-            if (accountAge.years >= 5) {
-                badges.push("🕰️ GitHub Veteran");
-            }
-
-            const recentlyActive = repositories.some(repository => {
-                const days =
-                    (Date.now() - new Date(repository.updated_at)) /
-                    (1000 * 60 * 60 * 24);
-
-                return days <= 30;
-            });
-
-            if (recentlyActive) {
-                badges.push("🔥 Recently Active");
-            }
-
-            if (badges.length === 0) {
-                badges.push("🌱 Rising Developer");
-            }
-
-            elements.badges.innerHTML = badges
-                .map(
-                    badge =>
-                        `<span class="achievement">${badge}</span>`
-                )
-                .join("");
+            document.getElementById("stats").innerHTML =
+                stats
+                    .map(stat => `
+                        <div class="stat">
+                            <strong>${formatNumber(stat.value)}</strong>
+                            <span>${stat.label}</span>
+                        </div>
+                    `)
+                    .join("");
         }
 
         function renderLanguages(repositories) {
-            const languageCounts = {};
+            const languageCount = {};
 
             repositories.forEach(repository => {
-                if (!repository.language) {
-                    return;
-                }
+                if (!repository.language) return;
 
-                languageCounts[repository.language] =
-                    (languageCounts[repository.language] || 0) + 1;
+                languageCount[repository.language] =
+                    (languageCount[repository.language] || 0) + 1;
             });
 
-            const sortedLanguages = Object.entries(languageCounts)
-                .sort((first, second) => second[1] - first[1])
+            const languages = Object.entries(languageCount)
+                .sort((a, b) => b[1] - a[1])
                 .slice(0, 6);
 
-            const total =
-                sortedLanguages.reduce(
-                    (sum, [, count]) => sum + count,
-                    0
-                ) || 1;
+            const container = document.getElementById("languages");
 
-            if (sortedLanguages.length === 0) {
-                elements.languagesList.innerHTML =
-                    `<p class="empty-message">
-                        No language information is available yet.
-                    </p>`;
+            if (languages.length === 0) {
+                container.innerHTML =
+                    `<p class="empty">No language data available.</p>`;
                 return;
             }
 
-            elements.languagesList.innerHTML = sortedLanguages
+            const total = languages.reduce(
+                (sum, language) => sum + language[1],
+                0
+            );
+
+            container.innerHTML = languages
                 .map(([language, count]) => {
                     const percentage = Math.round(
                         (count / total) * 100
@@ -1621,16 +855,11 @@
                     return `
                         <div>
                             <div class="language-header">
-                                <span class="language-name">
-                                    ${escapeHtml(language)}
-                                </span>
-
-                                <span class="language-percentage">
-                                    ${percentage}%
-                                </span>
+                                <strong>${escapeHtml(language)}</strong>
+                                <span>${percentage}%</span>
                             </div>
 
-                            <div class="language-track">
+                            <div class="language-bar">
                                 <div
                                     class="language-fill"
                                     style="width: ${percentage}%"
@@ -1644,56 +873,49 @@
 
         function renderRepositories(repositories) {
             const topRepositories = [...repositories]
-                .sort((first, second) => {
-                    if (
-                        second.stargazers_count !==
-                        first.stargazers_count
-                    ) {
-                        return (
-                            second.stargazers_count -
-                            first.stargazers_count
-                        );
+                .sort((a, b) => {
+                    if (b.stargazers_count !== a.stargazers_count) {
+                        return b.stargazers_count - a.stargazers_count;
                     }
 
                     return (
-                        new Date(second.updated_at) -
-                        new Date(first.updated_at)
+                        new Date(b.updated_at) -
+                        new Date(a.updated_at)
                     );
                 })
                 .slice(0, 6);
 
+            const container =
+                document.getElementById("repositories");
+
             if (topRepositories.length === 0) {
-                elements.repoGrid.innerHTML =
-                    `<p class="empty-message">
-                        This user has no public repositories yet.
-                    </p>`;
+                container.innerHTML =
+                    `<p class="empty">No public repositories found.</p>`;
                 return;
             }
 
-            elements.repoGrid.innerHTML = topRepositories
+            container.innerHTML = topRepositories
                 .map(repository => `
-                    <article class="repo-card">
+                    <div class="repo">
                         <a
-                            class="repo-title"
+                            class="repo-name"
                             href="${repository.html_url}"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            ${escapeHtml(repository.name)} ↗
+                            ${escapeHtml(repository.name)}
                         </a>
 
                         <p class="repo-description">
-                            ${
-                                escapeHtml(
-                                    repository.description ||
-                                    "No description provided."
-                                )
-                            }
+                            ${escapeHtml(
+                                repository.description ||
+                                "No description provided."
+                            )}
                         </p>
 
                         <div class="repo-meta">
                             <span>
-                                💻 ${escapeHtml(
+                                ${escapeHtml(
                                     repository.language || "Various"
                                 )}
                             </span>
@@ -1711,33 +933,33 @@
                             </span>
 
                             <span>
-                                🕒 ${timeAgo(repository.updated_at)}
+                                Updated ${timeAgo(repository.updated_at)}
                             </span>
                         </div>
-                    </article>
+                    </div>
                 `)
                 .join("");
         }
 
         function renderActivity(events) {
-            if (!events.length) {
-                elements.activityList.innerHTML =
-                    `<p class="empty-message">
-                        No recent public activity is available.
-                    </p>`;
+            const container = document.getElementById("activity");
+
+            if (events.length === 0) {
+                container.innerHTML =
+                    `<p class="empty">No recent public activity.</p>`;
                 return;
             }
 
-            elements.activityList.innerHTML = events
-                .slice(0, 8)
+            container.innerHTML = events
+                .slice(0, 7)
                 .map(event => {
-                    const activity = getActivityDescription(event);
+                    const activity = describeActivity(event);
 
                     return `
-                        <article class="activity-item">
-                            <div class="activity-icon">
+                        <div class="activity-item">
+                            <span class="activity-icon">
                                 ${activity.icon}
-                            </div>
+                            </span>
 
                             <div class="activity-text">
                                 ${activity.text}
@@ -1746,112 +968,82 @@
                                     ${timeAgo(event.created_at)}
                                 </span>
                             </div>
-                        </article>
+                        </div>
                     `;
                 })
                 .join("");
         }
 
-        function getActivityDescription(event) {
-            const repositoryName = escapeHtml(
+        function describeActivity(event) {
+            const repository = escapeHtml(
                 event.repo?.name || "a repository"
             );
 
             switch (event.type) {
-                case "PushEvent": {
-                    const commitCount =
-                        event.payload?.commits?.length || 0;
-
+                case "PushEvent":
                     return {
                         icon: "📤",
-                        text:
-                            `Pushed ${commitCount} commit` +
-                            `${commitCount === 1 ? "" : "s"} to ` +
-                            `<strong>${repositoryName}</strong>.`
+                        text: `Pushed commits to <strong>${repository}</strong>`
                     };
-                }
 
                 case "CreateEvent":
                     return {
                         icon: "✨",
-                        text:
-                            `Created a new ${
-                                escapeHtml(
-                                    event.payload?.ref_type || "resource"
-                                )
-                            } in <strong>${repositoryName}</strong>.`
+                        text: `Created something in <strong>${repository}</strong>`
                     };
 
                 case "WatchEvent":
                     return {
                         icon: "⭐",
-                        text:
-                            `Starred <strong>${repositoryName}</strong>.`
+                        text: `Starred <strong>${repository}</strong>`
                     };
 
                 case "ForkEvent":
                     return {
                         icon: "🍴",
-                        text:
-                            `Forked <strong>${repositoryName}</strong>.`
+                        text: `Forked <strong>${repository}</strong>`
                     };
 
                 case "IssuesEvent":
                     return {
                         icon: "🎯",
-                        text:
-                            `${
-                                capitalize(
-                                    event.payload?.action || "Updated"
-                                )
-                            } an issue in ` +
-                            `<strong>${repositoryName}</strong>.`
+                        text: `Worked on an issue in <strong>${repository}</strong>`
                     };
 
                 case "PullRequestEvent":
                     return {
                         icon: "🔀",
-                        text:
-                            `${
-                                capitalize(
-                                    event.payload?.action || "Updated"
-                                )
-                            } a pull request in ` +
-                            `<strong>${repositoryName}</strong>.`
-                    };
-
-                case "IssueCommentEvent":
-                    return {
-                        icon: "💬",
-                        text:
-                            `Commented in ` +
-                            `<strong>${repositoryName}</strong>.`
+                        text: `Worked on a pull request in <strong>${repository}</strong>`
                     };
 
                 default:
                     return {
-                        icon: "⚡",
-                        text:
-                            `Performed ${escapeHtml(
-                                event.type.replace("Event", "")
-                            )} activity in ` +
-                            `<strong>${repositoryName}</strong>.`
+                        icon: "•",
+                        text: `Public activity in <strong>${repository}</strong>`
                     };
             }
         }
 
+        function setupTheme() {
+            const savedTheme =
+                localStorage.getItem("explorer-theme");
+
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark");
+                themeButton.textContent = "☀️";
+            }
+        }
+
         function saveRecentSearch(username) {
-            const searches = getRecentSearches()
-                .filter(
-                    savedUsername =>
-                        savedUsername.toLowerCase() !==
-                        username.toLowerCase()
-                );
+            const searches = getRecentSearches().filter(
+                item =>
+                    item.toLowerCase() !== username.toLowerCase()
+            );
 
             searches.unshift(username);
 
             localStorage.setItem(
-                "githubExplorerRecentSearches",
+                "recent-github-searches",
                 JSON.stringify(searches.slice(0, 5))
             );
         }
@@ -1860,7 +1052,7 @@
             try {
                 return JSON.parse(
                     localStorage.getItem(
-                        "githubExplorerRecentSearches"
+                        "recent-github-searches"
                     )
                 ) || [];
             } catch {
@@ -1868,158 +1060,68 @@
             }
         }
 
-        function renderRecentSearches() {
+        function showRecentSearches() {
             const searches = getRecentSearches();
 
-            if (!searches.length) {
-                elements.recentSearches.innerHTML =
-                    `<span class="recent-label">
-                        Try searching: torvalds or addyosmani
+            if (searches.length === 0) {
+                recentSearches.innerHTML =
+                    `<span style="color: var(--muted); font-size: 13px;">
+                        Try: torvalds, addyosmani or sindresorhus
                     </span>`;
                 return;
             }
 
-            elements.recentSearches.innerHTML =
-                `<span class="recent-label">Recent:</span>` +
-                searches
-                    .map(username => `
-                        <button
-                            class="recent-item"
-                            type="button"
-                            data-username="${escapeHtml(username)}"
-                        >
-                            @${escapeHtml(username)}
-                        </button>
-                    `)
-                    .join("");
+            recentSearches.innerHTML = searches
+                .map(username => `
+                    <button
+                        class="recent-button"
+                        type="button"
+                        data-username="${escapeHtml(username)}"
+                    >
+                        @${escapeHtml(username)}
+                    </button>
+                `)
+                .join("");
 
             document
-                .querySelectorAll(".recent-item")
+                .querySelectorAll(".recent-button")
                 .forEach(button => {
-                    button.addEventListener("click", () => {
-                        const username =
+                    button.addEventListener("click", function () {
+                        usernameInput.value =
                             button.dataset.username;
 
-                        elements.usernameInput.value = username;
-                        searchUser(username);
+                        searchUser(button.dataset.username);
                     });
                 });
         }
 
-        async function shareCurrentReport() {
-            if (!currentUsername) {
-                return;
-            }
+        function loadUserFromUrl() {
+            const parameters =
+                new URLSearchParams(window.location.search);
 
-            const shareUrl =
-                `${window.location.origin}${window.location.pathname}` +
-                `?user=${encodeURIComponent(currentUsername)}`;
+            const username = parameters.get("user");
 
-            try {
-                if (navigator.share) {
-                    await navigator.share({
-                        title:
-                            `${currentUsername}'s GitHub Explorer Report`,
-                        text:
-                            `Explore @${currentUsername}'s GitHub profile.`,
-                        url: shareUrl
-                    });
-                } else {
-                    await navigator.clipboard.writeText(shareUrl);
-                    showToast("Report link copied to clipboard.");
-                }
-            } catch (error) {
-                if (error.name !== "AbortError") {
-                    showToast("Unable to share the report.");
-                }
+            if (username) {
+                usernameInput.value = username;
+                searchUser(username);
             }
         }
 
-        function showLoading() {
-            elements.status.className = "status show";
-            elements.status.innerHTML = `
-                <div class="spinner"></div>
-                <p>Exploring GitHub profile and repositories...</p>
-            `;
+        function updateUrl(username) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("user", username);
+
+            window.history.replaceState({}, "", url);
         }
 
-        function showStatus(message, type = "") {
-            elements.status.className =
-                `status show ${type}`.trim();
-
-            elements.status.textContent = message;
+        function showStatus(message, isError = false) {
+            statusBox.textContent = message;
+            statusBox.className =
+                `status visible${isError ? " error" : ""}`;
         }
 
         function hideStatus() {
-            elements.status.className = "status";
-            elements.status.innerHTML = "";
-        }
-
-        function showToast(message) {
-            elements.toast.textContent = message;
-            elements.toast.classList.add("show");
-
-            window.setTimeout(() => {
-                elements.toast.classList.remove("show");
-            }, 2500);
-        }
-
-        function launchConfetti() {
-            const colors = [
-                "#58a6ff",
-                "#bc8cff",
-                "#3fb950",
-                "#d29922",
-                "#f85149"
-            ];
-
-            for (let index = 0; index < 45; index++) {
-                const confetti = document.createElement("span");
-
-                confetti.className = "confetti";
-                confetti.style.left = `${Math.random() * 100}vw`;
-                confetti.style.backgroundColor =
-                    colors[Math.floor(Math.random() * colors.length)];
-
-                confetti.style.animationDelay =
-                    `${Math.random() * 0.6}s`;
-
-                confetti.style.transform =
-                    `rotate(${Math.random() * 360}deg)`;
-
-                document.body.appendChild(confetti);
-
-                window.setTimeout(() => {
-                    confetti.remove();
-                }, 3200);
-            }
-        }
-
-        function calculateAccountAge(createdAt) {
-            const createdDate = new Date(createdAt);
-            const now = new Date();
-
-            let years =
-                now.getFullYear() - createdDate.getFullYear();
-
-            let months =
-                now.getMonth() - createdDate.getMonth();
-
-            if (months < 0) {
-                years--;
-                months += 12;
-            }
-
-            return {
-                years: Math.max(0, years),
-                months: Math.max(0, months)
-            };
-        }
-
-        function normalizeUsername(username) {
-            return String(username)
-                .trim()
-                .replace(/^@/, "");
+            statusBox.className = "status";
         }
 
         function isValidUsername(username) {
@@ -2030,32 +1132,12 @@
             );
         }
 
-        function normalizeWebsite(website) {
-            const trimmedWebsite = String(website).trim();
-
-            if (
-                trimmedWebsite.startsWith("http://") ||
-                trimmedWebsite.startsWith("https://")
-            ) {
-                return trimmedWebsite;
-            }
-
-            return `https://${trimmedWebsite}`;
-        }
-
-        function updateUrl(username) {
-            const url = new URL(window.location.href);
-            url.searchParams.set("user", username);
-
-            window.history.replaceState({}, "", url);
-        }
-
-        function formatDate(dateString) {
+        function formatDate(date) {
             return new Intl.DateTimeFormat("en", {
                 year: "numeric",
                 month: "short",
                 day: "numeric"
-            }).format(new Date(dateString));
+            }).format(new Date(date));
         }
 
         function formatNumber(number) {
@@ -2065,41 +1147,28 @@
             }).format(number);
         }
 
-        function timeAgo(dateString) {
-            const date = new Date(dateString);
+        function timeAgo(date) {
             const seconds = Math.floor(
-                (Date.now() - date.getTime()) / 1000
+                (Date.now() - new Date(date).getTime()) / 1000
             );
 
-            const units = [
-                { label: "year", seconds: 31536000 },
-                { label: "month", seconds: 2592000 },
-                { label: "day", seconds: 86400 },
-                { label: "hour", seconds: 3600 },
-                { label: "minute", seconds: 60 }
+            const times = [
+                ["year", 31536000],
+                ["month", 2592000],
+                ["day", 86400],
+                ["hour", 3600],
+                ["minute", 60]
             ];
 
-            for (const unit of units) {
-                const value = Math.floor(seconds / unit.seconds);
+            for (const [name, value] of times) {
+                const amount = Math.floor(seconds / value);
 
-                if (value >= 1) {
-                    return (
-                        `${value} ${unit.label}` +
-                        `${value === 1 ? "" : "s"} ago`
-                    );
+                if (amount >= 1) {
+                    return `${amount} ${name}${amount > 1 ? "s" : ""} ago`;
                 }
             }
 
-            return "Just now";
-        }
-
-        function capitalize(value) {
-            const text = String(value);
-
-            return (
-                text.charAt(0).toUpperCase() +
-                text.slice(1)
-            );
+            return "just now";
         }
 
         function escapeHtml(value) {
